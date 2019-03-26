@@ -67,3 +67,22 @@ acme默认通过在DNS记录中加入信息的方式验证，这样更适合在8
 * 参考[群晖 Let's Encrypt 证书的自动更新](http://www.up4dev.com/2017/09/11/synology-ssl-cert-update/)
 
 此外，Traefik是一个把端口映射到二级域名的具备服务发现机制的动态路由，会自动自动申请微服务的HTTPS证书
+
+### 7. 后记^4
+synlogogy上装https的证书，其实是2个痛点的交集：
+1. 需要照顾娇贵的windows 10自带的客户端
+2. 在服务器端没有公网IP，或者没有80端口的前提下，搞一个synology的证书
+   * 最关键的，Windows下通过Python pip安装的certbot不好用，会有`os.chmod`找不到的错，而且到9012年都还没解决，所以需要用linux subsystem
+   * 一般的v1服务器不支持，需要v2，也就是`https://acme-v02.api.letsencrypt.org/directory`
+   * Challenge还不能是一般的`dns`，需要`dns-01`
+   * 最好加上`--agree-tos`的参数
+
+前者，貌似不支持`yourcompany.com`的域名，必须是二级域名，比如`nas.yourcompany.com`的格式，才被Windows认为是合法的
+后者，通过`certbot`命令，大致如下
+```
+: export HTTP_PROXY="http://127.0.0.1:1080"
+sudo certbot certonly --manual --agree-tos --server https://acme-v02.api.letsencrypt.org/directory -d *.yourdomain.com -d yourdomain.com --preferred-challenges "dns-01"
+```
+之后，在`C:\Users\YourUser\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_xxxxx\LocalState\rootfs\etc\letsencrypt\archive\yourdomain.com`找到生成的文件 ，注意`UbuntuonWindows_xxxxx`每个人的路径可能不一样。
+
+最后还有一个遗留问题没有解决，也就是这种方式生成的证书必须是二级通配域名，但前面必须要有前缀……
