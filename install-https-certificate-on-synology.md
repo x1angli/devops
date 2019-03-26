@@ -85,4 +85,3 @@ sudo certbot certonly --manual --agree-tos --server https://acme-v02.api.letsenc
 ```
 之后，在`C:\Users\YourUser\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_xxxxx\LocalState\rootfs\etc\letsencrypt\archive\yourdomain.com`找到生成的文件 ，注意`UbuntuonWindows_xxxxx`每个人的路径可能不一样。
 
-最后还有一个遗留问题没有解决，也就是这种方式生成的证书必须是二级通配域名，但前面必须要有前缀……
