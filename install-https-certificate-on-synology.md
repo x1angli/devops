@@ -1,5 +1,5 @@
-# Troubleshooting Case: Installing SSL certificates on Synology
-# 故障排除实战案例: 在群晖上安装SSL证书
+# Cookbook Guidance: Installing SSL certificates on Synology
+# 指南攻略: 在群晖上安装SSL证书
 
 
 ### 0. 目标 ###
